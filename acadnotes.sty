@@ -1,0 +1,140 @@
+% customstyle.sty
+\ProvidesPackage{acadnotes}
+
+% ============================
+% Required Packages
+% ============================
+
+\RequirePackage{graphicx}        % Required for inserting images
+\RequirePackage[colorlinks=true, linkcolor=blue]{hyperref} % Hyperlinks
+\RequirePackage{enumitem}        % For customizing lists (e.g., bullet points)
+\RequirePackage{titling}         % To customize the title page
+\RequirePackage{lipsum}          % For generating filler text (example purposes)
+\RequirePackage{etoolbox}        % For additional counter handling
+\RequirePackage{fancyhdr}        % For custom headers and footers
+\RequirePackage[a4paper, margin=1in]{geometry} % Set margins to 1 inch
+\RequirePackage{titlesec}        % To customize chapter and section titles
+\RequirePackage{xparse}   
+
+% ============================
+% Table of Contents and List Settings
+% ============================
+
+\setcounter{tocdepth}{1}         % Limit table of contents depth to sections only
+\setlist{itemsep=0.1ex}          % Setting vertical space between bullet points
+
+% ============================
+% Supersection Counter and Formatting
+% ============================
+
+\newcounter{supersection}        % Define a counter for supersections
+\renewcommand{\thesupersection}{\Roman{supersection}} % Use Roman numerals for supersections
+
+% ============================
+% Theorem Setup
+% ============================
+
+\newtheorem{definition}{Definition} % Define a new theorem for Definitions
+
+% ============================
+% Fancy Header and Footer Setup
+% ============================
+
+% Clear default header and footer fields
+\pagestyle{fancy}
+\fancyhf{} 
+
+% Define a custom command for the footer layout
+% Define customfooter command that accepts title and author as arguments
+\newcommand{\myfootertitle}{Default Name}
+\newcommand{\myfooterauthor}{Default Author}
+
+% Commands to allow customization
+\newcommand{\setfootertitle}[1]{\renewcommand{\myfootertitle}{#1}}
+\newcommand{\setfooterauthor}[1]{\renewcommand{\myfooterauthor}{#1}}
+
+\newcommand{\customfooter}{%
+  \fancyfoot[L]{\textit{\myfooterauthor}}  % Left-aligned footer with passed title
+  \fancyfoot[C]{\thepage}                  % Centered footer with page number
+  \fancyfoot[R]{\myfootertitle}          % Right-aligned footer with passed author
+  \renewcommand{\footrulewidth}{0.4pt}     % Add a line in the footer
+}
+
+
+% Apply the custom footer to both fancy and plain styles
+\customfooter
+\fancypagestyle{plain}{%
+  \fancyhf{}                                   % Clear all fields
+  \customfooter                                % Apply custom footer
+}
+
+\renewcommand{\headrulewidth}{0pt}             % Remove header line
+
+% ============================
+% Chapter Title Formatting
+% ============================
+
+\titleformat{\chapter}[display]
+  {\normalfont\LARGE\bfseries}                  % Style of the chapter title
+  {Chapter \thechapter}{0.5em}{}                % Chapter number format
+  [\vspace{0.1em}\rule{\textwidth}{0.4pt}]      % Horizontal rule after title
+
+\titlespacing*{\chapter}
+  {0pt}{-10pt}{20pt}                            % Spacing before and after chapter title
+
+% ============================
+% Appendix Setup
+% ============================
+
+\preto\appendix{
+  \clearpage                                    % Ensure a page break before starting the appendix
+  
+  % Format for appendix chapter titles
+  \titleformat{\chapter}[display]
+    {\normalfont\LARGE\bfseries}                % Style of the chapter title
+    {Appendix \thechapter}{0.5em}{}              % Change to "Appendix"
+    [\vspace{0.1em}\rule{\textwidth}{0.4pt}]     % Horizontal rule after title
+
+  \titlespacing*{\chapter}
+    {0pt}{-10pt}{20pt}                          % Spacing before and after chapter title
+
+  \renewcommand{\thepage}{\Alph{chapter}-\arabic{page}} % Page number format for appendix
+  \setcounter{page}{1}                           % Restart page numbering
+  \pagenumbering{roman}                          % Use Roman numerals in the appendix
+}
+
+% ============================
+% Supersection Command
+% ============================
+
+\newcommand{\supersection}[1]{
+  \clearpage                                    % Start on a new page
+  \refstepcounter{supersection}                  % Increment the supersection counter
+  \thispagestyle{empty}                         % Suppress page number on the title page
+  \vspace*{\fill}                               % Push content to the vertical center
+  \begin{center}
+    \Huge \bfseries Part \thesupersection \\[1em]
+    \LARGE #1                                  % Title of the supersection
+  \end{center}
+  \vspace*{\fill}                               % Push remaining space to the bottom
+
+  % Add to Table of Contents (TOC)
+  \addcontentsline{toc}{chapter}{\large\textbf{Part~\thesupersection: #1}}
+
+  \newpage                                     % Start a new page after the title page
+  \pagestyle{plain}                             % Restore normal page style
+}
+
+% ============================
+% Front Matter Setup
+% ============================
+
+\newcommand{\setupfrontmatter}{
+  \maketitle                                    % Generate title page
+  \pagenumbering{Roman}                         % Use Roman numerals for front matter
+  \pagestyle{plain}                             % Use plain page style for front matter
+  \tableofcontents                              % Generate Table of Contents
+  \newpage                                      % Start a new page after the TOC
+  \pagenumbering{arabic}                        % Switch to Arabic numerals for main content
+}
+
