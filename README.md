@@ -101,17 +101,12 @@ By default, the TOC includes only chapters and sections. Adjust with:
 
 ---
 
-## Documentation
-
-For a detailed explanation of features and more examples, refer to the [compiled documentation](acadnotes-doc.pdf).
-
----
 
 ## Contributing
 
 Contributions are welcome! Feel free to:
 - Submit pull requests for new features or bug fixes.
-- Report issues via the [GitHub Issues](https://github.com/your-username/acadnotes/issues) page.
+- Report issues via the [GitHub Issues](https://github.com/faisal-ahm/acadnotes/issues) page.
 
 ---
 
